@@ -101,6 +101,8 @@ mytextclock.font = theme.font
 
 -- Calendar
 theme.cal = lain.widget.calendar({
+    cal = "/usr/bin/cal -w --color=always",
+    followtag = true,
     attach_to = { mytextclock },
     notification_preset = {
         font = "Courier New 18", -- elwin changed font + size
@@ -112,7 +114,7 @@ theme.cal = lain.widget.calendar({
 -- Weather
 local weathericon = wibox.widget.imagebox(theme.widget_weather)
 theme.weather = lain.widget.weather({
-    city_id = 2643743, -- placeholder (London)
+    city_id = 2751773, --Leiden --elwin
     notification_preset = { font = "Courier New 18", fg = theme.fg_normal }, --elwin changed font + size
     weather_na_markup = markup.fontfg(theme.font, "#eca4c4", "N/A "),
     settings = function()
@@ -163,9 +165,16 @@ local cpu = lain.widget.cpu({
     end
 })
 
+local load = lain.widgets.sysload({
+    settings = function()
+        widget:set_markup(markup.fontfg(theme.font, "#e33a6e", load_1))
+    end
+})
+
 -- Coretemp
 local tempicon = wibox.widget.imagebox(theme.widget_temp)
 local temp = lain.widget.temp({
+    tempfile = "/sys/class/thermal/thermal_zone4/temp",
     settings = function()
         widget:set_markup(markup.fontfg(theme.font, "#f1af5f", coretemp_now .. "°C "))
     end
@@ -311,6 +320,7 @@ function theme.at_screen_connect(s)
             memory.widget,
             cpuicon,
             cpu.widget,
+            load,
             fsicon,
             theme.fs.widget,
             weathericon,
