@@ -94,6 +94,7 @@ Installation
 
     $ git clone --recursive https://github.com/copycat-killer/awesome-copycats.git
     $ mv -bv awesome-copycats/* ~/.config/awesome; rm -r awesome-copycats
+    $ echo "require('awesome-config')" > ~/.config/awesome/rc.lua
 
 Usage
 =====
