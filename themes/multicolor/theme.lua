@@ -103,7 +103,7 @@ mytextclock.font = theme.font
 theme.cal = lain.widget.calendar({
     attach_to = { mytextclock },
     notification_preset = {
-        font = "xos4 Terminus 10",
+        font = "Courier New 18", -- elwin changed font + size
         fg   = theme.fg_normal,
         bg   = theme.bg_normal
     }
@@ -113,7 +113,7 @@ theme.cal = lain.widget.calendar({
 local weathericon = wibox.widget.imagebox(theme.widget_weather)
 theme.weather = lain.widget.weather({
     city_id = 2643743, -- placeholder (London)
-    notification_preset = { font = "xos4 Terminus 10", fg = theme.fg_normal },
+    notification_preset = { font = "Courier New 18", fg = theme.fg_normal }, --elwin changed font + size
     weather_na_markup = markup.fontfg(theme.font, "#eca4c4", "N/A "),
     settings = function()
         descr = weather_now["weather"][1]["description"]:lower()
@@ -126,7 +126,7 @@ theme.weather = lain.widget.weather({
 local fsicon = wibox.widget.imagebox(theme.widget_fs)
 theme.fs = lain.widget.fs({
     options = "--exclude-type=tmpfs",
-    notification_preset = { font = "xos4 Terminus 10", fg = theme.fg_normal },
+    notification_preset = { font = "Courier New 18", fg = theme.fg_normal }, --elwin changed font + size
     settings  = function()
         widget:set_markup(markup.fontfg(theme.font, "#80d9d8", fs_now.used .. "% "))
     end
