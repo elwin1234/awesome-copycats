@@ -125,7 +125,7 @@ theme.weather = lain.widget.weather({
 -- / fs
 local fsicon = wibox.widget.imagebox(theme.widget_fs)
 theme.fs = lain.widget.fs({
-    options = "--exclude-type=tmpfs",
+    -- options = "--exclude-type=tmpfs", --elwin do not exclude
     notification_preset = { font = "Courier New 18", fg = theme.fg_normal }, --elwin changed font + size
     settings  = function()
         widget:set_markup(markup.fontfg(theme.font, "#80d9d8", fs_now.used .. "% "))
