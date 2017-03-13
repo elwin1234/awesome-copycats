@@ -165,7 +165,7 @@ local cpu = lain.widget.cpu({
     end
 })
 
-local load = lain.widgets.sysload({
+local load = lain.widget.sysload({
     settings = function()
         widget:set_markup(markup.fontfg(theme.font, "#e33a6e", load_1))
     end
