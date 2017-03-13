@@ -137,7 +137,7 @@ theme.fs = lain.widgets.fs({
 --[[ Mail IMAP check
 -- commented because it needs to be set before use
 local mailicon = wibox.widget.imagebox()
-local mail = lain.widgets.imap({
+local mail = lain.widget.imap({
     timeout  = 180,
     server   = "server",
     mail     = "mail",
@@ -159,7 +159,7 @@ local mail = lain.widgets.imap({
 
 -- CPU
 local cpuicon = wibox.widget.imagebox(theme.widget_cpu)
-local cpu = lain.widgets.cpu({
+local cpu = lain.widget.cpu({
     settings = function()
         widget:set_markup(markup.fontfg(theme.font, "#e33a6e", cpu_now.usage .. "% "))
     end
@@ -182,13 +182,12 @@ local temp = lain.widgets.temp({
 
 -- Battery
 local baticon = wibox.widget.imagebox(theme.widget_batt)
-local bat = lain.widgets.bat({
+local bat = lain.widget.bat({
     settings = function()
-        if bat_now.perc ~= "N/A" then
-            bat_now.perc = bat_now.perc .. "%"
-        end
+        local perc = bat_now.perc ~= "N/A" and bat_now.perc .. "%" or bat_now.perc
+
         if bat_now.ac_status == 1 then
-            bat_now.perc = bat_now.perc .. " plug"
+            perc = perc .. " plug"
         end
 
         widget:set_markup(markup.fontfg(theme.font, theme.fg_normal, bat_now.perc .. " "))
@@ -197,7 +196,7 @@ local bat = lain.widgets.bat({
 
 -- ALSA volume
 local volicon = wibox.widget.imagebox(theme.widget_vol)
-theme.volume = lain.widgets.alsa({
+theme.volume = lain.widget.alsa({
     settings = function()
         if volume_now.status == "off" then
             volume_now.level = volume_now.level .. "M"
@@ -211,7 +210,7 @@ theme.volume = lain.widgets.alsa({
 local netdownicon = wibox.widget.imagebox(theme.widget_netdown)
 local netdowninfo = wibox.widget.textbox()
 local netupicon = wibox.widget.imagebox(theme.widget_netup)
-local netupinfo = lain.widgets.net({
+local netupinfo = lain.widget.net({
     settings = function()
         if iface ~= "network off" and
            string.match(theme.weather.widget.text, "N/A")
@@ -226,7 +225,7 @@ local netupinfo = lain.widgets.net({
 
 -- MEM
 local memicon = wibox.widget.imagebox(theme.widget_mem)
-local memory = lain.widgets.mem({
+local memory = lain.widget.mem({
     settings = function()
         widget:set_markup(markup.fontfg(theme.font, "#e0da37", mem_now.used .. "M "))
     end
@@ -234,7 +233,7 @@ local memory = lain.widgets.mem({
 
 -- MPD
 local mpdicon = wibox.widget.imagebox()
-theme.mpd = lain.widgets.mpd({
+theme.mpd = lain.widget.mpd({
     settings = function()
         mpd_notification_preset = {
             text = string.format("%s [%s] - %s\n%s", mpd_now.artist,
@@ -265,7 +264,7 @@ function theme.at_screen_connect(s)
     s.quake = lain.util.quake({ app = awful.util.terminal })
 
     -- If wallpaper is a function, call it with the screen
-    if type(wallpaper) == "function" then
+    if type(theme.wallpaper) == "function" then
         theme.wallpaper = theme.wallpaper(s)
     end
     gears.wallpaper.maximized(theme.wallpaper, s, true)
