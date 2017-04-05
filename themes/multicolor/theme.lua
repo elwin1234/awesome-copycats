@@ -227,7 +227,7 @@ local netupinfo = lain.widget.net({
 local memicon = wibox.widget.imagebox(theme.widget_mem)
 local memory = lain.widget.mem({
     settings = function()
-        widget:set_markup(markup.fontfg(theme.font, "#e0da37", mem_now.used .. "M "))
+        widget:set_markup(markup.fontfg(theme.font, "#e0da37", mem_now.used .. "M " .. mem_now.perc .. "%"))
     end
 })
 
@@ -313,21 +313,21 @@ function theme.at_screen_connect(s)
             netdowninfo,
             netupicon,
             netupinfo.widget,
-            volicon,
-            theme.volume.widget,
             memicon,
             memory.widget,
             cpuicon,
             cpu.widget,
             load,
-            fsicon,
-            theme.fs.widget,
-            weathericon,
-            theme.weather.widget,
             tempicon,
             temp.widget,
+            fsicon,
+            theme.fs.widget,
             baticon,
             bat.widget,
+            volicon,
+            theme.volume.widget,
+            weathericon,
+            theme.weather.widget,
             clockicon,
             mytextclock,
         },
