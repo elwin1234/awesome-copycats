@@ -174,7 +174,8 @@ local load = lain.widget.sysload({
 -- Coretemp
 local tempicon = wibox.widget.imagebox(theme.widget_temp)
 local temp = lain.widget.temp({
-    tempfile = "/sys/class/thermal/thermal_zone4/temp",
+    tempfile = "/sys/bus/platform/devices/coretemp.0/hwmon/hwmon0/temp2_input",
+
     settings = function()
         widget:set_markup(markup.fontfg(theme.font, "#f1af5f", coretemp_now .. "°C "))
     end
