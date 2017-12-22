@@ -6,10 +6,11 @@
                                      
 --]]
 
-
+-- require("spotify")
 local gears = require("gears")
 local lain  = require("lain")
 local awful = require("awful")
+local spotify = require("spotify")
 local wibox = require("wibox")
 local os    = { getenv = os.getenv, setlocale = os.setlocale }
 
@@ -228,7 +229,7 @@ local netupinfo = lain.widget.net({
 local memicon = wibox.widget.imagebox(theme.widget_mem)
 local memory = lain.widget.mem({
     settings = function()
-        widget:set_markup(markup.fontfg(theme.font, "#e0da37", mem_now.used .. "M " .. mem_now.perc .. "%"))
+        widget:set_markup(markup.fontfg(theme.font, "#e0da37", mem_now.used .. "M " .. mem_now.perc .. "% "))
     end
 })
 
@@ -311,10 +312,10 @@ function theme.at_screen_connect(s)
             wibox.widget.systray(),
             --mailicon,
             --mail.widget,
-            netdownicon,
-            netdowninfo,
-            netupicon,
-            netupinfo.widget,
+            -- netdownicon,
+            -- netdowninfo,
+            -- netupicon,
+            -- netupinfo.widget,
             cpuicon,
             cpu.widget,
             load,
@@ -322,12 +323,13 @@ function theme.at_screen_connect(s)
             temp.widget,
             memicon,
             memory.widget,
-            fsicon,
-            theme.fs.widget,
-            baticon,
-            bat.widget,
+            -- fsicon, -- fan speed 
+            -- theme.fs.widget, -- fan speed
+            -- baticon,
+            -- bat.widget,
             weathericon,
             theme.weather.widget,
+            spotify_widget,
             clockicon,
             mytextclock,
             volicon,
@@ -346,6 +348,7 @@ function theme.at_screen_connect(s)
         },
         s.mytasklist, -- Middle widget
         { -- Right widgets
+            spotify_widget,
             layout = wibox.layout.fixed.horizontal,
             s.mylayoutbox,
         },
