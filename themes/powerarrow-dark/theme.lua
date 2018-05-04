@@ -1,16 +1,17 @@
-
 --[[
-                                      
-     Powerarrow Dark Awesome WM theme 
-     github.com/copycat-killer        
-                                      
+
+     Powerarrow Dark Awesome WM theme
+     github.com/lcpz
+
 --]]
 
 local gears = require("gears")
 local lain  = require("lain")
 local awful = require("awful")
 local wibox = require("wibox")
-local os    = { getenv = os.getenv }
+
+local os = { getenv = os.getenv }
+local my_table = awful.util.table or gears.table -- 4.{0,1} compatibility
 
 local theme                                     = {}
 theme.dir                                       = os.getenv("HOME") .. "/.config/awesome/themes/powerarrow-dark"
@@ -91,17 +92,16 @@ local separators = lain.util.separators
 
 -- Textclock
 local clockicon = wibox.widget.imagebox(theme.widget_clock)
-local clock = lain.widget.watch({
-    timeout  = 60,
-    cmd      = " date +'%a %d %b %R'",
-    settings = function()
-        widget:set_markup(" " .. markup.font(theme.font, output))
+local clock = awful.widget.watch(
+    "date +'%a %d %b %R'", 60,
+    function(widget, stdout)
+        widget:set_markup(" " .. markup.font(theme.font, stdout))
     end
-})
+)
 
 -- Calendar
 theme.cal = lain.widget.calendar({
-    attach_to = { clock.widget },
+    attach_to = { clock },
     notification_preset = {
         font = "xos4 Terminus 10",
         fg   = theme.fg_normal,
@@ -112,7 +112,7 @@ theme.cal = lain.widget.calendar({
 -- Mail IMAP check
 local mailicon = wibox.widget.imagebox(theme.widget_mail)
 --[[ commented because it needs to be set before use
-mailicon:buttons(awful.util.table.join(awful.button({ }, 1, function () awful.spawn(mail) end)))
+mailicon:buttons(my_table.join(awful.button({ }, 1, function () awful.spawn(mail) end)))
 local mail = lain.widget.imap({
     timeout  = 180,
     server   = "server",
@@ -131,8 +131,22 @@ local mail = lain.widget.imap({
 --]]
 
 -- MPD
+local musicplr = awful.util.terminal .. " -title Music -g 130x34-320+16 -e ncmpcpp"
 local mpdicon = wibox.widget.imagebox(theme.widget_music)
-mpdicon:buttons(awful.util.table.join(awful.button({ }, 1, function () awful.spawn_with_shell(musicplr) end)))
+mpdicon:buttons(my_table.join(
+    awful.button({ modkey }, 1, function () awful.spawn.with_shell(musicplr) end),
+    awful.button({ }, 1, function ()
+        awful.spawn.with_shell("mpc prev")
+        theme.mpd.update()
+    end),
+    awful.button({ }, 2, function ()
+        awful.spawn.with_shell("mpc toggle")
+        theme.mpd.update()
+    end),
+    awful.button({ }, 3, function ()
+        awful.spawn.with_shell("mpc next")
+        theme.mpd.update()
+    end)))
 theme.mpd = lain.widget.mpd({
     settings = function()
         if mpd_now.state == "play" then
@@ -179,10 +193,9 @@ local temp = lain.widget.temp({
 -- / fs
 local fsicon = wibox.widget.imagebox(theme.widget_hdd)
 theme.fs = lain.widget.fs({
-    options  = "--exclude-type=tmpfs",
     notification_preset = { fg = theme.fg_normal, bg = theme.bg_normal, font = "xos4 Terminus 10" },
     settings = function()
-        widget:set_markup(markup.font(theme.font, " " .. fs_now.used .. "% "))
+        widget:set_markup(markup.font(theme.font, " " .. fs_now["/"].percentage .. "% "))
     end
 })
 
@@ -263,7 +276,7 @@ function theme.at_screen_connect(s)
     -- Create an imagebox widget which will contains an icon indicating which layout we're using.
     -- We need one layoutbox per screen.
     s.mylayoutbox = awful.widget.layoutbox(s)
-    s.mylayoutbox:buttons(awful.util.table.join(
+    s.mylayoutbox:buttons(my_table.join(
                            awful.button({ }, 1, function () awful.layout.inc( 1) end),
                            awful.button({ }, 3, function () awful.layout.inc(-1) end),
                            awful.button({ }, 4, function () awful.layout.inc( 1) end),
@@ -320,7 +333,7 @@ function theme.at_screen_connect(s)
             wibox.container.background(neticon, theme.bg_focus),
             wibox.container.background(net.widget, theme.bg_focus),
             arrl_dl,
-            clock.widget,
+            clock,
             spr,
             arrl_ld,
             wibox.container.background(s.mylayoutbox, theme.bg_focus),

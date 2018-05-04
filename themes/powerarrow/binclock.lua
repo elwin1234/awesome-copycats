@@ -1,19 +1,18 @@
-
 --[[
-                                                  
-     Licensed under GNU General Public License v2 
-      * (c) 2017, Luke Bonham                     
-      * (c) 2013, romockee                        
-                                                  
+
+     Licensed under GNU General Public License v2
+      * (c) 2017, Luca CPZ
+      * (c) 2013, romockee
+
 --]]
 
-local gears    = require("gears")
-local wibox    = require("wibox")
-local date     = os.date
-local ipairs   = ipairs
-local math     = math
-local select   = select
-local string   = string
+local gears  = require("gears")
+local wibox  = require("wibox")
+local date   = os.date
+local ipairs = ipairs
+local math   = math
+local select = select
+local string = string
 
 local binclock = {}
 
@@ -82,13 +81,13 @@ local function factory(args)
         layout = wibox.widget.base.make_widget
     }
 
-    binclock.timer = gears.timer { timeout = binclock.show_seconds and 1 or 60 }
-
-    binclock.timer:connect_signal("timeout", function()
-        binclock.widget:emit_signal("widget::redraw_needed")
-    end)
-
-    binclock.timer:start()
+    binclock.timer = gears.timer {
+        autostart  = true,
+        timeout    = binclock.show_seconds and 1 or 60,
+        callback   = function()
+            binclock.widget:emit_signal("widget::redraw_needed")
+        end
+    }
 
     return binclock
 end

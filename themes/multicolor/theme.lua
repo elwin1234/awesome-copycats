@@ -1,9 +1,8 @@
-
 --[[
-                                     
-     Multicolor Awesome WM theme 2.0 
-     github.com/copycat-killer       
-                                     
+
+     Multicolor Awesome WM theme 2.0
+     github.com/lcpz
+
 --]]
 
 -- require("spotify")
@@ -12,7 +11,9 @@ local lain  = require("lain")
 local awful = require("awful")
 local spotify = require("spotify")
 local wibox = require("wibox")
-local os    = { getenv = os.getenv, setlocale = os.setlocale }
+
+local os = { getenv = os.getenv, setlocale = os.setlocale }
+local my_table = awful.util.table or gears.table -- 4.{0,1} compatibility
 
 local theme                                     = {}
 theme.confdir                                   = os.getenv("HOME") .. "/.config/awesome/themes/multicolor"
@@ -44,7 +45,6 @@ theme.widget_cpu                                = theme.confdir .. "/icons/cpu.p
 theme.widget_weather                            = theme.confdir .. "/icons/dish.png"
 theme.widget_fs                                 = theme.confdir .. "/icons/fs.png"
 theme.widget_mem                                = theme.confdir .. "/icons/mem.png"
-theme.widget_fs                                 = theme.confdir .. "/icons/fs.png"
 theme.widget_note                               = theme.confdir .. "/icons/note.png"
 theme.widget_note_on                            = theme.confdir .. "/icons/note_on.png"
 theme.widget_netdown                            = theme.confdir .. "/icons/net_down.png"
@@ -130,6 +130,7 @@ local fsicon = wibox.widget.imagebox(theme.widget_fs)
 theme.fs = lain.widget.fs({
     -- options = "--exclude-type=tmpfs", --elwin do not exclude
     notification_preset = { font = "Courier New 18", fg = theme.fg_normal }, --elwin changed font + size
+    -- notification_preset = { font = "xos4 Terminus 10", fg = theme.fg_normal }, --upstream
     settings  = function()
         widget:set_markup(markup.fontfg(theme.font, "#80d9d8", fs_now.used .. "% "))
     end
@@ -192,7 +193,7 @@ local bat = lain.widget.bat({
             perc = perc .. " plug"
         end
 
-        widget:set_markup(markup.fontfg(theme.font, theme.fg_normal, bat_now.perc .. " "))
+        widget:set_markup(markup.fontfg(theme.font, theme.fg_normal, perc .. " "))
     end
 })
 
@@ -280,7 +281,7 @@ function theme.at_screen_connect(s)
     -- Create an imagebox widget which will contains an icon indicating which layout we're using.
     -- We need one layoutbox per screen.
     s.mylayoutbox = awful.widget.layoutbox(s)
-    s.mylayoutbox:buttons(awful.util.table.join(
+    s.mylayoutbox:buttons(my_table.join(
                            awful.button({ }, 1, function () awful.layout.inc( 1) end),
                            awful.button({ }, 3, function () awful.layout.inc(-1) end),
                            awful.button({ }, 4, function () awful.layout.inc( 1) end),
@@ -323,7 +324,7 @@ function theme.at_screen_connect(s)
             temp.widget,
             memicon,
             memory.widget,
-            -- fsicon, -- fan speed 
+            -- fsicon, -- fan speed
             -- theme.fs.widget, -- fan speed
             -- baticon,
             -- bat.widget,

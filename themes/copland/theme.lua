@@ -1,17 +1,18 @@
-
 --[[
-                                  
-     Copland Awesome WM theme 2.0 
-     github.com/copycat-killer    
-                                  
+
+     Copland Awesome WM theme 2.0
+     github.com/lcpz
+
 --]]
 
-local gears   = require("gears")
-local lain    = require("lain")
-local awful   = require("awful")
-local wibox   = require("wibox")
-local eminent = require("eminent")
-local os      = { getenv = os.getenv, setlocale = os.setlocale }
+local gears = require("gears")
+local lain  = require("lain")
+local awful = require("awful")
+local wibox = require("wibox")
+
+local os = { getenv = os.getenv, setlocale = os.setlocale }
+local awesome, client = awesome, client
+local my_table = awful.util.table or gears.table -- 4.{0,1} compatibility
 
 local theme                                     = {}
 theme.dir                                       = os.getenv("HOME") .. "/.config/awesome/themes/copland"
@@ -214,16 +215,14 @@ local fsbar = wibox.widget {
     widget           = wibox.widget.progressbar,
 }
 theme.fs = lain.widget.fs({
-    partition = "/home",
-    options = "--exclude-type=tmpfs",
     notification_preset = { fg = theme.fg_normal, bg = theme.bg_normal, font = "Tamzen 10.5" },
     settings  = function()
-        if tonumber(fs_now.used) < 90 then
+        if fs_now["/home"].percentage < 90 then
             fsbar:set_color(theme.fg_normal)
         else
             fsbar:set_color("#EB8F8F")
         end
-        fsbar:set_value(fs_now.used / 100)
+        fsbar:set_value(fs_now["/home"].percentage / 100)
     end
 })
 local fsbg = wibox.container.background(fsbar, "#474747", gears.shape.rectangle)
@@ -253,7 +252,7 @@ theme.volume = lain.widget.alsabar({
     }
 })
 theme.volume.tooltip.wibox.fg = theme.fg_focus
-theme.volume.bar:buttons(awful.util.table.join (
+theme.volume.bar:buttons(my_table.join (
           awful.button({}, 1, function()
             awful.spawn.with_shell(string.format("%s -e alsamixer", awful.util.terminal))
           end),
@@ -288,6 +287,16 @@ local spr       = wibox.widget.textbox(' ')
 local small_spr = wibox.widget.textbox(markup.font("Tamzen 4", " "))
 local bar_spr   = wibox.widget.textbox(markup.font("Tamzen 3", " ") .. markup.fontfg(theme.font, "#333333", "|") .. markup.font("Tamzen 5", " "))
 
+-- Eminent-like task filtering
+local orig_filter = awful.widget.taglist.filter.all
+
+-- Taglist label functions
+awful.widget.taglist.filter.all = function (t, args)
+    if t.selected or #t:clients() > 0 then
+        return orig_filter(t, args)
+    end
+end
+
 function theme.at_screen_connect(s)
     -- Quake application
     s.quake = lain.util.quake({ app = awful.util.terminal })
@@ -307,7 +316,7 @@ function theme.at_screen_connect(s)
     -- Create an imagebox widget which will contains an icon indicating which layout we're using.
     -- We need one layoutbox per screen.
     s.mylayoutbox = awful.widget.layoutbox(s)
-    s.mylayoutbox:buttons(awful.util.table.join(
+    s.mylayoutbox:buttons(my_table.join(
                            awful.button({ }, 1, function () awful.layout.inc( 1) end),
                            awful.button({ }, 3, function () awful.layout.inc(-1) end),
                            awful.button({ }, 4, function () awful.layout.inc( 1) end),
