@@ -176,7 +176,7 @@ local load = lain.widget.sysload({
 -- Coretemp
 local tempicon = wibox.widget.imagebox(theme.widget_temp)
 local temp = lain.widget.temp({
-    tempfile = "/sys/bus/platform/devices/coretemp.0/hwmon/hwmon2/temp2_input",
+    tempfile = "/home/elwin/.config/awesome/awesome-config/cputemp",
 
     settings = function()
         widget:set_markup(markup.fontfg(theme.font, "#f1af5f", coretemp_now .. "°C "))
