@@ -326,8 +326,8 @@ function theme.at_screen_connect(s)
             memory.widget,
             -- fsicon, -- fan speed
             -- theme.fs.widget, -- fan speed
-            -- baticon,
-            -- bat.widget,
+            baticon,
+            bat.widget,
             weathericon,
             theme.weather.widget,
             spotify_widget,
