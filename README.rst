@@ -1,6 +1,6 @@
 Awesome WM Copycats
 ===================
-test
+
 -------------------------
 Themes for Awesome WM 4.x
 -------------------------
